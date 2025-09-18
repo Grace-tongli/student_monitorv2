@@ -1,0 +1,3 @@
+start_time,end_time,duration_sec,move_entropy,effective_path_ratio,avg_speed,acceleration_variance,total_distance,click_count,scroll_count
+2025-09-18 10:43:32,2025-09-18 10:44:00,28.0,2.8678,0.5073,272.14,8164106134.3303,7620.1,8,75
+2025-09-18 10:43:55,2025-09-18 10:45:00,65.46,2.8872,0.0934,490.22,27017346154.7265,32051.35,17,62

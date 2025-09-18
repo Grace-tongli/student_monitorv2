@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>学生监控系统 - 仪表板</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>学生监控系统</h1>
+            <div class="user-info">
+                欢迎, {{ name }} | <a href="{{ url_for('logout') }}">退出</a>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <h2>监控控制</h2>
+            <div class="control-panel">
+                <div class="status">
+                    <h3>当前状态: <span id="status-indicator">{{ '运行中' if status.mouse or status.keyboard else '已停止' }}</span></h3>
+                    {% if status.start_time %}
+                    <p>开始时间: {{ status.start_time }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="controls">
+                    <button id="start-btn" onclick="startMonitoring()" {{ 'disabled' if status.mouse or status.keyboard else '' }}>开始监控</button>
+                    <button id="stop-btn" onclick="stopMonitoring()" {{ 'disabled' if not status.mouse and not status.keyboard else '' }}>停止监控</button>
+                </div>
+
+                <div class="options">
+                    <label><input type="checkbox" id="monitor-mouse" checked> 监控鼠标</label>
+                    <label><input type="checkbox" id="monitor-keyboard" checked> 监控键盘</label>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/student.js') }}"></script>
+</body>
+</html>
+        

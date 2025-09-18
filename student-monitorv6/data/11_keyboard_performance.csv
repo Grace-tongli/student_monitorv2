@@ -1,0 +1,2 @@
+start_time,end_time,duration_sec,total_keypresses,median_ikd,p95_ikd,mad,auto_correction_rate,space_rate,backspace_count,space_count
+2025-09-18 10:44:27,2025-09-18 10:44:47,20.25,22,0.193,0.4472,0.109,0.0,0.0,0,0

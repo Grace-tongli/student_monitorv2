@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>学生监控系统 - 管理面板</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .student-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .data-file-indicators {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .file-indicator {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        .file-exists {
+            background: #27ae60;
+            color: white;
+        }
+        .file-missing {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>学生监控系统 - 管理面板</h1>
+            <div class="user-info">
+                欢迎, {{ name }} | <a href="{{ url_for('logout') }}">退出</a>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <h2>学生监控概览</h2>
+
+            <div class="student-stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{ students|length }}</div>
+                    <div>注册学生总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ students|selectattr('monitoring')|list|length }}</div>
+                    <div>活跃监控学生</div>
+                </div>
+            </div>
+
+            <table class="students-table">
+                <thead>
+                    <tr>
+                        <th>学生用户名</th>
+                        <th>监控状态</th>
+                        <th>最后活动时间</th>
+                        <th>数据文件</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>
+                            {% if student.monitoring %}
+                            <span style="color: green;">●</span> 监控中
+                            {% else %}
+                            <span style="color: red;">●</span> 已停止
+                            {% endif %}
+                        </td>
+                        <td>{{ student.last_active }}</td>
+                        <td>
+                            <div class="data-file-indicators">
+                                <span class="file-indicator {% if student.data_files.mouse %}file-exists{% else %}file-missing{% endif %}">
+                                    鼠标
+                                </span>
+                                <span class="file-indicator {% if student.data_files.keyboard %}file-exists{% else %}file-missing{% endif %}">
+                                    键盘
+                                </span>
+                                <span class="file-indicator {% if student.data_files.emotion %}file-exists{% else %}file-missing{% endif %}">
+                                    情绪
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <button onclick="viewStudentData('{{ student.name }}')">查看详细数据</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="student-details" id="student-details" style="display: none;">
+                <h3>学生详细数据: <span id="selected-student"></span></h3>
+                <div class="data-tabs">
+                    <button class="tab-btn active" onclick="showTab('mouse')">鼠标数据</button>
+                    <button class="tab-btn" onclick="showTab('keyboard')">键盘数据</button>
+                    <button class="tab-btn" onclick="showTab('emotion')">情绪数据</button>
+                </div>
+
+                <div id="mouse-data" class="tab-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>动作</th>
+                                <th>位置信息</th>
+                                <th>持续时间(s)</th>
+                                <th>点击次数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mouse-data-body"></tbody>
+                    </table>
+                </div>
+
+                <div id="keyboard-data" class="tab-content" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>按键信息</th>
+                                <th>按键时长</th>
+                                <th>退格率</th>
+                            </tr>
+                        </thead>
+                        <tbody id="keyboard-data-body"></tbody>
+                    </table>
+                </div>
+
+                <div id="emotion-data" class="tab-content" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>情绪状态</th>
+                                <th>详细描述</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emotion-data-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
